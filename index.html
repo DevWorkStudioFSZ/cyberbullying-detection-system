@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyberbullying Detection</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 420px;
+      transition: 0.3s;
+    }
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    }
+    h2 {
+      color: #333;
+    }
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      resize: none;
+      font-size: 15px;
+      margin-top: 10px;
+      transition: 0.2s;
+    }
+    textarea:focus {
+      border-color: #667eea;
+      outline: none;
+      box-shadow: 0 0 6px rgba(102,126,234,0.5);
+    }
+    button {
+      margin-top: 18px;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #5a67d8, #6b46c1);
+      transform: scale(1.05);
+    }
+    .result {
+      margin-top: 22px;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 12px;
+      border-radius: 10px;
+      display: inline-block;
+      min-width: 80%;
+    }
+    .cyber {
+      background: #ffe4e4;
+      color: #b91c1c;
+      border: 2px solid #b91c1c;
+    }
+    .normal {
+      background: #e6ffed;
+      color: #065f46;
+      border: 2px solid #065f46;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🚨 Cyberbullying Detector</h2>
+    <textarea id="textInput" rows="4" placeholder="Type a message here..."></textarea>
+    <br>
+    <button onclick="checkText()">Check</button>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    async function checkText() {
+      const text = document.getElementById("textInput").value;
+      const response = await fetch("https://c665ea7dcd95.ngrok-free.app/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      });
+
+      const data = await response.json();
+      const resultDiv = document.getElementById("result");
+
+      if (data.prediction === "Cyberbullying") {
+        resultDiv.innerHTML = "⚠️ Cyberbullying Detected!";
+        resultDiv.className = "result cyber";
+      } else {
+        resultDiv.innerHTML = "✅ Normal Message";
+        resultDiv.className = "result normal";
+      }
+    }
+  </script>
+</body>
+</html>
